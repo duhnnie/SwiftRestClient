@@ -1,12 +1,12 @@
 import Foundation
 
-public class SwiftRestCaller {
+public class SwiftRestClient {
     private enum HTTPMethod: String {
         case GET
         case POST
     }
 
-    public static let shared = SwiftRestCaller()
+    public static let shared = SwiftRestClient()
     public typealias RequestCompletion = (Data?, URLResponse?, Error?) -> Void
     public typealias Headers = [String: String]
 
