@@ -1,3 +1,3 @@
 # SwiftRestClient
 
-A description of this package.
+A super-simple REST client for Swift.
