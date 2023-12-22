@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'SwiftRestClient'
-  s.version          = '0.4.0'
+  s.version          = '0.5.0'
   s.summary          = 'Simple Swift Rest client'
 
   s.homepage         = 'https://github.com/duhnnie/SwiftRestClient'
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.watchos.deployment_target = watchos_deployment_target
   s.tvos.deployment_target = tvos_deployment_target
 
-  s.swift_version = '5.0'
+  s.swift_versions = ['5']
 
   s.source_files = 'Sources/SwiftRestClient/**/*'
 end
