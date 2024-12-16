@@ -7,6 +7,7 @@ public class SwiftRestClient {
     private enum HTTPMethod: String {
         case GET
         case POST
+        case PUT
     }
     
     private enum ResponseError: Error {
@@ -105,5 +106,14 @@ public class SwiftRestClient {
     @available(iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func post(_ url: URL, body: Data? = nil, headers: Headers? = nil) async throws -> (Data, URLResponse) {
         return try await call(url, method: .POST, body: body, headers: headers)
+    }
+    
+    public func put(_ url: URL, body: Data? = nil, headers: Headers? = nil, onCompletion: @escaping RequestCompletion) -> Void {
+        call(url, method: .PUT, body: body, headers: headers, onCompletion: onCompletion)
+    }
+
+    @available(iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    public func put(_ url: URL, body: Data? = nil, headers: Headers? = nil) async throws -> (Data, URLResponse) {
+        return try await call(url, method: .PUT, body: body, headers: headers)
     }
 }
