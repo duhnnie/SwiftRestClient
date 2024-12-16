@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
   s.name             = 'SwiftRestClient'
-  s.version          = '0.5.0'
+  s.version          = '0.6.0'
   s.summary          = 'Simple Swift Rest client'
 
   s.homepage         = 'https://github.com/duhnnie/SwiftRestClient'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Daniel Canedo Ramos' => 'me@duhnnie.net' }
+  s.author           = { 'Daniel Canedo Ramos' => 'me@duhnnie.com' }
   s.source           = { :git => 'https://github.com/duhnnie/SwiftRestClient.git', :tag => s.version.to_s }
 
   ios_deployment_target = '11.0'
