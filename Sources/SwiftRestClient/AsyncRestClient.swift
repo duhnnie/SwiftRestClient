@@ -3,7 +3,7 @@ import Foundation
 import FoundationNetworking
 #endif
 
-@available(iOS 13.0, *)
+@available(iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 public class AsyncRestClient {
     private enum HTTPMethod: String {
         case GET
@@ -39,7 +39,7 @@ public class AsyncRestClient {
 
         request.httpBody = body
         
-        if #available(macOS 12.0, iOS 15.0, *) {
+        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *) {
             return try await URLSession.shared.data(for: request)
         } else {
             return try await withCheckedThrowingContinuation { continuation in
