@@ -45,6 +45,34 @@ public class SwiftRestClient {
         dataTask.resume()
     }
     
+    private func fallbackCall(
+        url: URL,
+       method: HTTPMethod,
+       body: Data? = nil,
+       headers: Headers? = nil
+    ) async throws -> (Data, URLResponse) {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.call(url, method: method, body: body, headers: headers) { data, response, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                
+                guard let data = data else {
+                    continuation.resume(throwing: ResponseError.NoData)
+                    return
+                }
+                
+                guard let response = response else {
+                    continuation.resume(throwing: ResponseError.NoResponse)
+                    return
+                }
+                
+                continuation.resume(returning: (data, response))
+            }
+        }
+    }
+    
     @available(iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     private func call(
         _ url: URL,
@@ -52,6 +80,7 @@ public class SwiftRestClient {
         body: Data? = nil,
         headers: Headers? = nil
     ) async throws -> (Data, URLResponse) {
+        #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS) || (os(Linux) && compiler(>=6.0))
         var request = URLRequest(url: url)
 
         request.httpMethod = method.rawValue
@@ -64,30 +93,14 @@ public class SwiftRestClient {
 
         request.httpBody = body
         
-        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *) {
+        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *){
             return try await URLSession.shared.data(for: request)
         } else {
-            return try await withCheckedThrowingContinuation { continuation in
-                self.call(url, method: method, body: body, headers: headers) { data, response, error in
-                    if let error = error {
-                        continuation.resume(throwing: error)
-                        return
-                    }
-                    
-                    guard let data = data else {
-                        continuation.resume(throwing: ResponseError.NoData)
-                        return
-                    }
-                    
-                    guard let response = response else {
-                        continuation.resume(throwing: ResponseError.NoResponse)
-                        return
-                    }
-                    
-                    continuation.resume(returning: (data, response))
-                }
-            }
+            return try await fallbackCall(url: url, method: method, body: body, headers: headers)
         }
+        #else
+        return try await fallbackCall(url: url, method: method, body: body, headers: headers)
+        #endif
     }
 
     public func get(_ url: URL, headers: Headers? = nil, onCompletion: @escaping RequestCompletion) -> Void {
