@@ -45,6 +45,7 @@ public class SwiftRestClient {
         dataTask.resume()
     }
     
+    @available(iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     private func fallbackCall(
         url: URL,
        method: HTTPMethod,
